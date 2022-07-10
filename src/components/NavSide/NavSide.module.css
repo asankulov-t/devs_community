@@ -1,0 +1,7 @@
+.navList{
+    margin: 0;
+    font-weight: bold;
+}
+.navList li{
+    padding-bottom: 20px;
+}
