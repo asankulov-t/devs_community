@@ -11,7 +11,7 @@ type ReadPageContainerType={
 }
 const ReadPageContainer = (props:ReadPageContainerType) => {
     let data = useSelector<AppRootType, Array<ReadType>>(state => state.ReadPageReducer.data)
-
+    console.log(data)
     return (
         <div>
             {data.map((t) => <ReadPage type_of={t.type_of} id={t.id} title={t.title} description={t.description}

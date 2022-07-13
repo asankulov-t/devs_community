@@ -8,7 +8,7 @@ type ContentTypes = {
     showMore:()=>void
 }
 const Content = (props: ContentTypes) => {
-    console.log(props.data)
+    console.log('gringo', props.data)
     return <div>
         {props.data.map((item) => <ContentItem title={item.title}
                                                                img={item.cover_image}                                                                                                id={item.id}

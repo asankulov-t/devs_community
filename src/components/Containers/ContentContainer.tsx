@@ -4,35 +4,34 @@ import {plusItemsAct, SetArticleThunk, ShowMoreThunk} from "../../store/Reducers
 import {AppDispatch, AppRootType} from "../../store/store";
 import {ArticlesReducerTypes} from "../../types/types";
 import Content from "../Content/Content";
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useLocation} from "react-router-dom";
 import ReadPageContainer from "./ReadPageContainer";
 
 const ContentContainer = () => {
-    let data=useSelector<AppRootType,Array<ArticlesReducerTypes>>((state) => state.SetArticleReducer.data)
-    let itemsCount=useSelector<AppRootType,number>((state) => state.SetArticleReducer.items)
-    let article=useSelector<AppRootType,string>(state => state.TagReducer.tag)
 
-    let dispatch=useDispatch<AppDispatch>();
-    useEffect(()=>{
+    let itemsCount = useSelector<AppRootType, number>((state) => state.SetArticleReducer.items);
+    let url = useSelector<AppRootType, string | unknown>((state) => state.SetArticleReducer.path);
+
+    let tagPath = useLocation();
+    let dispatch = useDispatch<AppDispatch>();
+    let data = useSelector<AppRootType, Array<ArticlesReducerTypes>>((state) => state.SetArticleReducer.data)
+
+    useEffect(() => {
         // @ts-ignore
-        dispatch(SetArticleThunk(article))
-    },[itemsCount])
+        dispatch(SetArticleThunk(tagPath.pathname.replace('/', '')))
+    }, [itemsCount, tagPath]);
 
-    let id=useSelector<AppRootType>(state => state.ReadPageReducer.id)
-    let pathForReadPage=id!==0&&id;
-    console.log('hello',article)
-    const showMoreFunc=()=>{
+    const showMoreFunc = () => {
         // @ts-ignore
         dispatch(plusItemsAct(10))
-
     }
-
-
     return (
-                <Routes>
-                    <Route path={article+''} element={ <Content showMore={showMoreFunc} data={data}/>}/>
-                    <Route path={pathForReadPage+''} element={ <ReadPageContainer/>}/>
-                </Routes>
+        <Routes>
+            <Route path={''} element={<Content showMore={showMoreFunc} data={data}/>}/>
+            <Route path={'/:category'} element={<Content showMore={showMoreFunc} data={data}/>}/>
+            <Route path={'/:category/:id'} element={<ReadPageContainer/>}/>
+
+        </Routes>
     );
 };
 

@@ -11,10 +11,11 @@ let initialState:initialArtType={
     path:''
 }
 
-const setArticlesAction=(data:Array<ArticlesReducerTypes>)=>{
+const setArticlesAction=(data:Array<ArticlesReducerTypes>,path:string)=>{
     return{
         type:'SET_ARTICLES',
-        data
+        data,
+        path
     }as const
 }
 const showMoreAct=(data:Array<ArticlesReducerTypes>)=>{
@@ -32,7 +33,7 @@ export const plusItemsAct=(items:number)=>{
 
 export const SetArticleThunk=(article:string)=>{
     return (dispatch:Dispatch<AnyAction>)=>{
-        API.getArticles(initialState.items,article).then((res)=>dispatch(setArticlesAction(res.data)))
+        API.getArticles(initialState.items,article).then((res)=>dispatch(setArticlesAction(res.data,article)))
     }
 }
 export const ShowMoreThunk=(countItems:number)=>{
@@ -49,7 +50,7 @@ type GlobalActionsType=ActionsType|PlusType
 export const SetArticleReducer=(state=initialState,action:GlobalActionsType):initialArtType=>{
     switch (action.type) {
         case "SET_ARTICLES":
-            return {data: action.data,tag:'',items:15,path:''}
+            return {data: action.data,tag:'',items:15,path:action.path}
         case "PLUS_ITEMS":
             let data=state.data
             return {data,tag:'',path:'',items:action.items}
